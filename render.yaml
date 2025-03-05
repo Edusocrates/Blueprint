@@ -2,7 +2,7 @@ services:
   - name: db
     type: pserv
     env: docker
-    image: postgres:13
+    dockerImage: postgres:13  # Alterado de 'image' para 'dockerImage'
     envVars:
       - key: POSTGRES_USER
         value: myuser
@@ -10,11 +10,10 @@ services:
         value: secret
       - key: POSTGRES_DB
         value: mydatabase
-    healthCheckPath: /
     disk:
       name: db-storage
       mountPath: /var/lib/postgresql/data
-    plan: standard # (Usa um plano com armazenamento persistente)
+    plan: standard  # Usa um plano que permite persistência de dados
 
   - name: app
     type: web
