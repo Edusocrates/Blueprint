@@ -1,26 +1,12 @@
-databases:
-  - name: mydatabase
-    databaseName: mydatabase
-    user: myuser
-    ipAllowList: [] # Permite apenas conexões pela rede privada
-
 services:
-  - type: web
-    name: app
-    runtime: docker
-    plan: standard
-    envVars:
-      - key: SPRING_PROFILES_ACTIVE
-        value: local
-      - key: SPRING_DATASOURCE_URL
-        fromDatabase:
-          name: mydatabase
-          property: connectionString
-      - key: SPRING_DATASOURCE_USERNAME
-        fromDatabase:
-          name: mydatabase
-          property: user
-      - key: SPRING_DATASOURCE_PASSWORD
-        fromDatabase:
-          name: mydatabase
-          property: password
+  - name: app
+    type: web
+    build:
+      dockerfilePath: ./Dockerfile
+    env:
+      SPRING_PROFILES_ACTIVE: local
+      SPRING_DATASOURCE_URL: jdbc:postgresql://dpg-cv45qq3qf0us73b62rug-a.render.com:5432/controle_restaurante
+      SPRING_DATASOURCE_USERNAME: controle_restaurante
+      SPRING_DATASOURCE_PASSWORD: 7qNixtizxbBFLe8nk5RTEfScTLVjVbT9
+    ports:
+      - "8080:8080"
