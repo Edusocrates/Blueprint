@@ -1,31 +1,30 @@
 services:
   - name: db
-    type: pserv
-    env: docker
-    dockerImage: postgres:13  # Alterado de 'image' para 'dockerImage'
+    type: database  # Especifica que é um banco de dados
+    databaseName: mydatabase
+    plan: free
+    databaseType: postgresql
+    ipAllowList: []  # Permite conexões apenas de dentro do Render
     envVars:
       - key: POSTGRES_USER
         value: myuser
       - key: POSTGRES_PASSWORD
         value: secret
-      - key: POSTGRES_DB
-        value: mydatabase
-    disk:
-      name: db-storage
-      mountPath: /var/lib/postgresql/data
-    plan: standard  # Usa um plano que permite persistência de dados
 
   - name: app
     type: web
     env: docker
     repo: https://github.com/seu-usuario/seu-repositorio
+    branch: main  # Ajuste para o nome correto da branch
     buildCommand: "./mvnw clean package"
     startCommand: "java -jar target/*.jar"
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: local
       - key: SPRING_DATASOURCE_URL
-        value: jdbc:postgresql://db:5432/mydatabase
+        fromService:
+          name: db
+          property: connectionString
       - key: SPRING_DATASOURCE_USERNAME
         value: myuser
       - key: SPRING_DATASOURCE_PASSWORD
