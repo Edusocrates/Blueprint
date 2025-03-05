@@ -1,0 +1,35 @@
+services:
+  - name: db
+    type: pserv
+    env: docker
+    image: postgres:13
+    envVars:
+      - key: POSTGRES_USER
+        value: myuser
+      - key: POSTGRES_PASSWORD
+        value: secret
+      - key: POSTGRES_DB
+        value: mydatabase
+    healthCheckPath: /
+    disk:
+      name: db-storage
+      mountPath: /var/lib/postgresql/data
+    plan: standard # (Usa um plano com armazenamento persistente)
+
+  - name: app
+    type: web
+    env: docker
+    repo: https://github.com/seu-usuario/seu-repositorio
+    buildCommand: "./mvnw clean package"
+    startCommand: "java -jar target/*.jar"
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: local
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:postgresql://db:5432/mydatabase
+      - key: SPRING_DATASOURCE_USERNAME
+        value: myuser
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: secret
+    plan: free
+    autoDeploy: true
