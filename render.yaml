@@ -1,11 +1,12 @@
 services:
   - name: db
-    type: postgres
+    type: database
+    database: postgres
+    plan: free
     env:
       POSTGRES_USER: myuser
       POSTGRES_PASSWORD: secret
       POSTGRES_DB: mydatabase
-    plan: free
     healthcheck:
       path: /health
       interval: 10s
