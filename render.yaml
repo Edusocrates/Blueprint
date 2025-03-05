@@ -5,9 +5,11 @@ services:
       dockerfilePath: ./Dockerfile
     env:
       SPRING_PROFILES_ACTIVE: local
-      SPRING_DATASOURCE_URL: jdbc:postgresql://{{fromDatabase("controle_restaurante").host}}:5432/controle_restaurante
-      SPRING_DATASOURCE_USERNAME: {{fromDatabase("controle_restaurante").username}}
-      SPRING_DATASOURCE_PASSWORD: {{fromDatabase("controle_restaurante").password}}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://{{ db.host }}:5432/controle_restaurante
+      SPRING_DATASOURCE_USERNAME: {{ db.username }}
+      SPRING_DATASOURCE_PASSWORD: {{ db.password }}
+    ports:
+      - "8080:8080"
 
 databases:
   - name: controle_restaurante
