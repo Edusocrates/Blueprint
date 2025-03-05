@@ -1,17 +1,13 @@
 services:
-  - name: app
-    type: web
-    build:
-      dockerfilePath: ./Dockerfile
-    env:
-      SPRING_PROFILES_ACTIVE: local
-      SPRING_DATASOURCE_URL: jdbc:postgresql://{{ db.host }}:5432/controle_restaurante
-      SPRING_DATASOURCE_USERNAME: {{ db.username }}
-      SPRING_DATASOURCE_PASSWORD: {{ db.password }}
-    ports:
-      - "8080:8080"
-
-databases:
-  - name: controle_restaurante
-    database: postgres
-    plan: free
+  - type: web
+    name: spring-app
+    runtime: docker
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:postgresql://dpg-cv45qq3qf0us73b62rug-a:5432/controle_restaurante
+      - key: SPRING_DATASOURCE_USERNAME
+        value: controle_restaurante
+      - key: SPRING_DATASOURCE_PASSWORD
+        sync: false
