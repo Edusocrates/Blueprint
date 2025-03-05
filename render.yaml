@@ -1,33 +1,34 @@
 services:
   - name: db
-    type: database  # Especifica que é um banco de dados
-    databaseName: mydatabase
+    type: web
+    env: docker
     plan: free
-    databaseType: postgresql
-    ipAllowList: []  # Permite conexões apenas de dentro do Render
+    dockerCommand: ""
+    image: postgres:13
     envVars:
       - key: POSTGRES_USER
         value: myuser
       - key: POSTGRES_PASSWORD
         value: secret
+      - key: POSTGRES_DB
+        value: mydatabase
+    healthCheckPath: "/"
 
   - name: app
     type: web
     env: docker
+    plan: free
     repo: https://github.com/seu-usuario/seu-repositorio
-    branch: main  # Ajuste para o nome correto da branch
+    branch: main  # Ajuste conforme necessário
     buildCommand: "./mvnw clean package"
     startCommand: "java -jar target/*.jar"
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: local
       - key: SPRING_DATASOURCE_URL
-        fromService:
-          name: db
-          property: connectionString
+        value: jdbc:postgresql://db:5432/mydatabase
       - key: SPRING_DATASOURCE_USERNAME
         value: myuser
       - key: SPRING_DATASOURCE_PASSWORD
         value: secret
-    plan: free
     autoDeploy: true
